@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Function to check if yt-dlp is installed
+check_yt_dlp() {
+    if ! command -v yt-dlp &> /dev/null; then
+        echo "yt-dlp is not installed. Installing..."
+        # Install yt-dlp (for Debian/Ubuntu, use apt; adjust for your package manager)
+        if command -v apt &> /dev/null; then
+            sudo apt update
+            sudo apt install -y yt-dlp
+        elif command -v brew &> /dev/null; then
+            brew install yt-dlp
+        elif command -v dnf &> /dev/null; then
+            sudo dnf install -y yt-dlp
+        elif command -v pacman &> /dev/null; then
+            sudo pacman -S yt-dlp
+        else
+            echo "Unsupported package manager. Please install yt-dlp manually."
+            exit 1
+        fi
+    fi
+}
+
 # Function to display the quality options
 show_quality_options() {
     echo "Select video quality:"
@@ -11,6 +32,9 @@ show_quality_options() {
     echo "6. 1080p"
     echo "7. Best Available"
 }
+
+# Check for yt-dlp installation
+check_yt_dlp
 
 # Prompt for YouTube link
 read -p "Enter the YouTube video link: " youtube_link
